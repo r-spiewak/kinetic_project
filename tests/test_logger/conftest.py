@@ -4,7 +4,7 @@ import os
 
 import pytest
 
-from python_template.logger import LoggerMixin
+from kinetic_project.logger import LoggerMixin
 
 
 @pytest.fixture
