@@ -2,6 +2,12 @@
 
 Repo for Kinetic Project.
 
+Assignment files are located in the `assignment_files` directory. 
+Analysis document is located in the main project directory.
+Supporting code is nested under the `src` directory. Tests for the supporting code are in the `tests` directory.
+
+[//]: # (Demo analysis is in the `sample_analysis_demo.ipynb` notebook in the main project directory.)
+
 ## Installation
 
 1. (If poetry is not already installed:) `curl -sSL https://install.python-poetry.org | python3 -`
