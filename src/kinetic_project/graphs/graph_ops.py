@@ -57,7 +57,7 @@ def iterate_subgraphs(
     A, verts = validate_graph_sink_source_condition(A, v=v)
     # key = (tuple(A), tuple(verts))
     # if key in hashmap:
-    if (key := (tuple(A), tuple(verts))) in hashmap:
+    if (key := (str(A), str(verts))) in hashmap:
         return subgraph_list
     hashmap[key] = 1
     if 1 < sum(sum(A)) < k:
