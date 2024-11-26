@@ -1,15 +1,11 @@
 """This file contains functions to be performed
 on graph adjacency matrices."""
 
-from typing import Tuple
-
 import networkx
 import numpy
 
 from kinetic_project.graphs.deg_ops import in_deg, out_deg
-from kinetic_project.graphs.graph_dimen_type_val import (
-    dimen_type_val,
-)
+from kinetic_project.graphs.graph_dimen_type_val import dimen_type_val
 
 
 def iterate_subgraphs(
@@ -17,7 +13,7 @@ def iterate_subgraphs(
     verts: numpy.ndarray | None = None,
     k: int | None = None,
     v: int | list[int] | None = None,
-) -> list[Tuple[numpy.ndarray, numpy.ndarray]]:
+) -> list[tuple[numpy.ndarray, numpy.ndarray]]:
     """This function validates conditions on a
     graph, and then iterates through and validates
     conditions on all the subgraphs recursively,
@@ -26,7 +22,7 @@ def iterate_subgraphs(
     Args:
         G (networkx.Graph | numpy.ndarray): The graph,
             represented as a networkx.Graph or
-            a numpy adjacency matrix. 
+            a numpy adjacency matrix.
         verts (numpy.ndarray | None): A vector
             representing the active vertices in the
             graph. If None, a vector of ones will
@@ -62,8 +58,10 @@ def iterate_subgraphs(
         # another, i.e., when the value of the element
         # in the adjacency matrix is >1.
         this_A, this_verts = A.copy(), verts.copy()
-        this_A[i,j] = 0
-        this_A, this_verts = validate_graph_sink_source_condition(this_A, this_verts, v)
+        this_A[i, j] = 0
+        this_A, this_verts = validate_graph_sink_source_condition(
+            this_A, this_verts, v
+        )
         subgraph_list.extend(iterate_subgraphs(this_A, this_verts, k, v))
     return subgraph_list
 
@@ -71,7 +69,7 @@ def iterate_subgraphs(
 def prune_graph(
     A: numpy.ndarray | networkx.Graph,
     verts: numpy.ndarray,
-) -> Tuple[numpy.ndarray, numpy.ndarray]:
+) -> tuple[numpy.ndarray, numpy.ndarray]:
     """This function prunes disconnected vertices
     from the adjacency matrix of a graph.
 
@@ -81,16 +79,16 @@ def prune_graph(
             a numpy adjacency matrix.
         verts (numpy.ndarray): A vector representing
             the active vertices in the graph.
-    
+
     Returns:
         (numpy.ndarray, numpy.ndarray): The pruned
             adjacency matrix and the vertex labels.
     """
     A, verts = dimen_type_val(A, verts)
     active_verts = numpy.nonzero(verts)[0]
-    active_eye = numpy.zeros((A.shape[0],len(active_verts)))
+    active_eye = numpy.zeros((A.shape[0], len(active_verts)))
     for ind, vert in enumerate(active_verts):
-        active_eye[vert,ind] = 1
+        active_eye[vert, ind] = 1
     pruned_A = numpy.matmul(active_eye.T, A)
     pruned_A = numpy.matmul(pruned_A, active_eye)
     return (pruned_A, active_verts)
@@ -100,7 +98,7 @@ def validate_graph_sink_source_condition(
     A: numpy.ndarray | networkx.Graph,
     verts: numpy.ndarray | None = None,
     v: int | list[int] | None = None,
-) -> Tuple[numpy.ndarray, numpy.ndarray]:
+) -> tuple[numpy.ndarray, numpy.ndarray]:
     """This function validates that a graph
     (represented by its adjacency matrix) does
     not have any vertices which are sinks or
@@ -127,22 +125,22 @@ def validate_graph_sink_source_condition(
             specific vertex is required to be in a
             subgraph for the subgraph to be considered
             valid. Defaults to None.
-    
+
     Returns:
         (numpy.ndarray, numpy.ndarray): The validated
             adjacency matrix and verts vector.
     """
     A, verts = dimen_type_val(A, verts)
     # print(f"Before: {A, verts}")
-    verts = numpy.logical_and(verts,in_deg(A)).astype(int)
-    verts = numpy.logical_and(verts,out_deg(A)).astype(int)
+    verts = numpy.logical_and(verts, in_deg(A)).astype(int)
+    verts = numpy.logical_and(verts, out_deg(A)).astype(int)
     A_new = zero_rows_and_cols(A.copy(), verts)
     # print(f"After: {A, verts}")
     # Check that necessary vertices are still included in the subgraph:
     if not validate_vertices(verts, v):
         dim = A.shape[0]
-        return (numpy.zeros((dim,dim)), numpy.zeros((dim,1)))
-    if numpy.array_equal(A_new,A):
+        return (numpy.zeros((dim, dim)), numpy.zeros((dim, 1)))
+    if numpy.array_equal(A_new, A):
         return (A_new, verts)
     return validate_graph_sink_source_condition(A_new, verts, v)
 
@@ -155,7 +153,7 @@ def validate_vertices(
     specific vertices.
 
     Args:
-        verts (numpy.ndarray): A vector
+        active_verts (numpy.ndarray): A vector
             representing the active vertices in the
             graph.
         v (in | list[int] | None): Vertices which
@@ -166,7 +164,7 @@ def validate_vertices(
             specific vertex is required to be in a
             subgraph for the subgraph to be considered
             valid. Defaults to None.
-    
+
     Returns:
         bool: If all the required vertices are active
             in active_verts (True), or not (False).
@@ -175,9 +173,8 @@ def validate_vertices(
         return True
     if isinstance(v, int):
         v = [v]
-    for vert in v:
-        if active_verts[vert] == 0:
-            return False
+    if any(active_verts[vert] == 0 for vert in v):
+        return False
     return True
 
 
@@ -189,7 +186,7 @@ def zero_rows_and_cols(
     """This function clears rows and columns
     in a matrix corresponding to the index
     where values in a vector are 0.
-    
+
     Args:
         mat (numpy.ndarray): The n by n matrix
             whose rows and columns should be zeroed.
@@ -207,7 +204,7 @@ def zero_rows_and_cols(
     """
     if not in_place:
         mat = mat.copy()
-    inds = numpy.where(vec==0)[0]
-    mat[inds,:]=0
-    mat[:,inds]=0
+    inds = numpy.where(vec == 0)[0]
+    mat[inds, :] = 0
+    mat[:, inds] = 0
     return mat

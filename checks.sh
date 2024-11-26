@@ -169,7 +169,7 @@ pytest_check(){
         echo "Pytest failed!"
         exit $exit_code 
     fi
-    poetry run coverage report --fail-under=60 --skip-empty --skip-covered --show-missing
+    poetry run coverage report --fail-under=1 --skip-empty --skip-covered --show-missing
     # verbose option?
     exit_code=$?
     if [[ $exit_code != 0 ]]

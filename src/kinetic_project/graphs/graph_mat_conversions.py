@@ -5,15 +5,13 @@ import networkx
 import numpy
 
 
-def graph_to_mat(
-    G: networkx.Graph
-) -> numpy.ndarray:
+def graph_to_mat(G: networkx.Graph) -> numpy.ndarray:
     """This function converts a networkx.Graph
     into its adjacency matrix representation.
 
     Args:
         G (networkx.Graph): Graph to convert.
-        
+
     Returns:
         numpy.ndarray: Adjacency matrix of G.
     """
@@ -35,7 +33,7 @@ def mat_to_graph(
             be used for the vertices. If None,
             labels vertices with consecutive
             integers. Defaults to None.
-        
+
     Returns:
         networkx.Graph: networkx.Graph representation
             of of G.
