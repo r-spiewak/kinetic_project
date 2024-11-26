@@ -55,9 +55,11 @@ def iterate_subgraphs(
         k = sum(sum(A)) + 1
     subgraph_list: list = []
     A, verts = validate_graph_sink_source_condition(A, v=v)
-    if (A, verts) in hashmap:
+    # key = (tuple(A), tuple(verts))
+    # if key in hashmap:
+    if (key := (tuple(A), tuple(verts))) in hashmap:
         return subgraph_list
-    hashmap[(A, verts)] = 1
+    hashmap[key] = 1
     if 1 < sum(sum(A)) < k:
         subgraph_list.append(prune_graph(A, verts))
     for i, j in numpy.argwhere(A):
