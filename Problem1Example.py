@@ -16,9 +16,9 @@ def main():
     start_time = time.time()
     subgraphs = iterate_subgraphs(G, k=10, v=2)
     print(f"Subgraph iteration time: {(time.time()-start_time)/60} min")
-    outfilename = Path(__file__).name
-    with open(outfilename, "r", encoding="utf8") as file:
-        file.write(subgraphs)
+    outfilename = Path(__file__).name + ".txt"
+    with open(outfilename, "w", encoding="utf8") as file:
+        file.write(str(subgraphs))
     print(f"Total script time: {(time.time()-start_time)/60} min")
 
 
