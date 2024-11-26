@@ -4,9 +4,8 @@ Repo for Kinetic Project.
 
 Assignment files are located in the `assignment_files` directory. 
 Analysis document is located in the main project directory.
+Calculations and results for Problem 1 are located in the `Problem1Example.ipynb` notebook in the main project repository.
 Supporting code is nested under the `src` directory. Tests for the supporting code are in the `tests` directory.
-
-[//]: # (Demo analysis is in the `sample_analysis_demo.ipynb` notebook in the main project directory.)
 
 ## Installation
 
