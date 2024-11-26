@@ -13,6 +13,7 @@ def iterate_subgraphs(
     verts: numpy.ndarray | None = None,
     k: int | None = None,
     v: int | list[int] | None = None,
+    hashmap: dict | None = None,
 ) -> list[tuple[numpy.ndarray, numpy.ndarray]]:
     """This function validates conditions on a
     graph, and then iterates through and validates
@@ -39,16 +40,24 @@ def iterate_subgraphs(
             specific vertex is required to be in a
             subgraph for the subgraph to be considered
             valid. Defaults to None.
+        hashmap (dict | None): Hashmap of subgraphs that
+            have been checked. If None, a hashmap is
+            created. Defaults to None.
 
     Returns:
         list: list of tuples of valid subgraphs and
             their corresponding vertex lists.
     """
     A, verts = dimen_type_val(G, verts)
+    if hashmap is None:
+        hashmap = {}
     if k is None:
         k = sum(sum(A)) + 1
-    subgraph_list = []
+    subgraph_list: list = []
     A, verts = validate_graph_sink_source_condition(A, v=v)
+    if (A, verts) in hashmap:
+        return subgraph_list
+    hashmap[(A, verts)] = 1
     if 1 < sum(sum(A)) < k:
         subgraph_list.append(prune_graph(A, verts))
     for i, j in numpy.argwhere(A):
@@ -62,7 +71,9 @@ def iterate_subgraphs(
         this_A, this_verts = validate_graph_sink_source_condition(
             this_A, this_verts, v
         )
-        subgraph_list.extend(iterate_subgraphs(this_A, this_verts, k, v))
+        subgraph_list.extend(
+            iterate_subgraphs(this_A, this_verts, k, v, hashmap)
+        )
     return subgraph_list
 
 
