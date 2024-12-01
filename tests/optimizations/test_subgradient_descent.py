@@ -14,7 +14,7 @@ from kinetic_project.optimizations.subgradient_methods import (
     subgradient_descent,
 )
 
-from .conftest import f_abs, f_cube, f_square
+from .conftest import f_abs, f_cube, f_square, neg_f_square
 
 
 def test_objective_function_minimization(funcs):
@@ -72,6 +72,17 @@ def test_numerical_subgradient():
     epsilon = 1e-6
     result = numerical_subgradient(f_square, x, epsilon)
     expected = (f_square(x + epsilon) - f_square(x)) / epsilon
+    assert numpy.isclose(
+        result, expected
+    ), f"Expected {expected}, got {result}."
+
+
+def test_numerical_subgradient_maximized():
+    """Tests for the numerical_subgradient function with argmax=True."""
+    x = 0.5
+    epsilon = 1e-6
+    result = numerical_subgradient(neg_f_square, x, epsilon, argmax=True)
+    expected = -(neg_f_square(x + epsilon) - neg_f_square(x)) / epsilon
     assert numpy.isclose(
         result, expected
     ), f"Expected {expected}, got {result}."

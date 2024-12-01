@@ -40,6 +40,18 @@ def f_cube(x: float) -> float:
     return x**3
 
 
+def neg_f_square(x: float) -> float:
+    """Sample negative squared function.
+
+    Args:
+        x (float): the number to negative square.
+
+    Returns:
+        float: The negative sqaure of x.
+    """
+    return -(x**2)
+
+
 @pytest.fixture
 def funcs():
     """Sample fixture of functions for subgradient descent tests."""
