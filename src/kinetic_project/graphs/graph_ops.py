@@ -96,6 +96,9 @@ def prune_graph(
     Returns:
         (numpy.ndarray, numpy.ndarray): The pruned
             adjacency matrix and the vertex labels.
+            Note that the vertext labels are not the
+            same shape as verts (n by 1), rather (1 by m),
+            where m <= n is the number of active vertices.
     """
     A, verts = dimen_type_val(A, verts)
     active_verts = numpy.nonzero(verts)[0]

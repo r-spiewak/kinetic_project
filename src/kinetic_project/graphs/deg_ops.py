@@ -44,9 +44,20 @@ def in_or_out_deg(
     A, verts = dimen_type_val(G, verts)
     if in_or_out not in AllowedDegs:
         raise ValueError(f"{in_or_out} is not in {AllowedDegs}.")
+    # This method is incorrect:
+    # if in_or_out == AllowedDegs.IN:
+    #     return numpy.matmul(A, verts)
+    # return numpy.matmul(verts.transpose(), A).transpose()
+    # if in_or_out == AllowedDegs.IN:
+    #     return numpy.array([[verts[ind]*sum(A[ind,:])] for ind in range(verts.shape[0])])
+    # return numpy.array([[verts[ind]*sum(A[:,ind])] for ind in range(verts.shape[0])])
     if in_or_out == AllowedDegs.IN:
-        return numpy.matmul(A, verts)
-    return numpy.matmul(verts.transpose(), A).transpose()
+        return numpy.array(
+            [verts[ind] * sum(A[ind, :]) for ind in range(verts.shape[0])]
+        )
+    return numpy.array(
+        [verts[ind] * sum(A[:, ind]) for ind in range(verts.shape[0])]
+    )
 
 
 def in_deg(
