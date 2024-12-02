@@ -80,8 +80,32 @@ def test_validate_graph_sink_source_condition():
     ), "Sink/source vertices should be marked as inactive."
 
 
-def test_validate_vertices():
-    """Tests the function validate_vertices."""
+def test_validate_vertices_none():
+    """Tests the function validate_vertices with a None."""
+    active_verts = numpy.array([[1], [1], [0]])
+    required_vertices = None
+    assert validate_vertices(
+        active_verts, required_vertices
+    ), "Should return True for active required vertices."
+    assert not validate_vertices(
+        active_verts, [2]
+    ), "Should return False for inactive required vertices."
+
+
+def test_validate_vertices_int():
+    """Tests the function validate_vertices with an int."""
+    active_verts = numpy.array([[1], [1], [0]])
+    required_vertices = 0
+    assert validate_vertices(
+        active_verts, required_vertices
+    ), "Should return True for active required vertices."
+    assert not validate_vertices(
+        active_verts, [2]
+    ), "Should return False for inactive required vertices."
+
+
+def test_validate_vertices_array():
+    """Tests the function validate_vertices with an array."""
     active_verts = numpy.array([[1], [1], [0]])
     required_vertices = [0, 1]
     assert validate_vertices(
